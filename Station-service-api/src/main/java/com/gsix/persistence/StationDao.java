@@ -12,10 +12,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 @Repository
 public interface StationDao extends JpaRepository<Station, Integer> {
 
-	public List<Station> searchStationById(int stationId);
+	public Station searchStationByStationName(String stationName);
 	
 	public Collection<Station> getAllStations();
 	
-	public Station findById(int stationId);
 
 }

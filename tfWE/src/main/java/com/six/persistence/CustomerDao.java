@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CustomerDao extends JpaRepository<Customer, Integer> {
     
-    public Customer findByUserEmail(String userEmail);
+    public Customer findByUserEmailAndUserPassword(String userEmail, String userPassword);
   
     @Modifying
     @Transactional

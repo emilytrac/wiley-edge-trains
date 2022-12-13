@@ -5,7 +5,8 @@ import java.util.Collection;
 import com.gsix.entity.Station;
 
 public interface StationService {
+	
 	Collection<Station> getAllStations();
 	
-	public Station searchStationById(int id);
+	double checkRouteCost(String sourceStation, String destStation);
 }

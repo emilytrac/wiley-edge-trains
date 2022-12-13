@@ -17,9 +17,9 @@ public class StationResource {
 	@Autowired
 	private StationService stationService;
 	
-	@GetMapping(path="/stations/{sid}",produces = MediaType.APPLICATION_JSON_VALUE)
-	public Station searchStationById(@PathVariable("sid") int id) {
-		return stationService.searchStationById(id);
+	@GetMapping(path="/stations/{source}/{des}",produces = MediaType.TEXT_PLAIN_VALUE)
+	public double stationResource(@PathVariable("source") String source, @PathVariable("des") String des) {
+		return stationService.checkRouteCost(source, des);
 	}
 	
 	@GetMapping(path = "/stations",produces =MediaType.APPLICATION_JSON_VALUE)

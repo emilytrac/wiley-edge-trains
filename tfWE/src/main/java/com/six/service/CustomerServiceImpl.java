@@ -14,36 +14,54 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private CustomerDao customerDao;
 
-    @Override
-    public Collection<Customer> getAllCustomers() {
-        return customerDao.findAll();
-    }
-
- 
+//    @Override
+//    public Collection<Customer> getAllCustomers() {
+//        return customerDao.findAll();
+//    }
 
 
     @Override
-    public boolean addCustomer(Customer customer) {
-    try{
-        customerDao.insertCustomer(customer.getUserId(),customer.getUserName(),customer.getUserPassword(), customer.getUserAddress(),
-                customer.getUserEmail(), customer.getUserPhone(), customer.getCardBalance());
-        return true;
-    }
+	public Customer loginCheck(String userEmail, String userPassword) {
+		try {
+			Customer customer = customerDao.findByUserEmailAndUserPassword(userEmail, userPassword);
+			if (customer != null)
+				return customer;
+			return null;
+		} catch (Exception e) {
+			return null;
+		}
+	}
     
-    
-    catch(SQLIntegrityConstraintViolationException ex) {
-        return false;
+    @Override
+    public Customer addCustomer(Customer customer) {
+	     
+    	if (customerDao.findByUserEmailAndUserPassword(customer.getUserName(), customer.getUserPassword()) == null) {
+    		
+    		customerDao.save(customer);
+    		return customer;
+    	} else {
+    		return null;
+    	}
     }
-    catch(Exception ex) {
-        return false;
-    }
-  }
-
-
-
 
 	@Override
-	public Customer findByUserEmail(String userEmail) {
-		return customerDao.findByUserEmail(userEmail);
+	public boolean balanceCheck(int userId) {
+		Customer customer = customerDao.findById(userId).orElse(null);
+		if(customer.getCardBalance() >= 20) 
+			return true;
+		else
+			return false;
+	}
+
+	@Override
+	public boolean updateBalance(int userId, double inc) {
+		Customer customer = customerDao.findById(userId).orElse(null);
+		if (customer != null) {
+			customer.setCardBalance(customer.getCardBalance() + inc);
+			customerDao.save(customer);
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

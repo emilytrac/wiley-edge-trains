@@ -6,10 +6,14 @@ import java.util.List;
 
 public interface CustomerService {
 
-	Collection<Customer> getAllCustomers();
+	// Collection<Customer> getAllCustomers();
         
-        public Customer findByUserEmail(String userEmail);
+    Customer loginCheck(String userEmail, String userPassword);
         
-        boolean addCustomer(Customer customer);
+    Customer addCustomer(Customer customer);
+    
+    boolean balanceCheck(int userId);
+    
+    boolean updateBalance(int userId, double inc);
         
 }

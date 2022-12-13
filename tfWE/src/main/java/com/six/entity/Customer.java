@@ -1,10 +1,7 @@
 package com.six.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,18 +14,25 @@ import lombok.NoArgsConstructor;
 public class Customer {
 
 	@Id
-        @Column(name="userId")
 	private int userId;
-        @Column(name="userName")
 	private String userName;
-        @Column(name="userPassword")
-        private String userPassword;
-        @Column(name="userAddress")
-        private String userAddress;
-        @Column(name="userEmail")
-        private String userEmail;
-        @Column(name="userPhone")
-        private String userPhone;
-        @Column(name="cardBalance")
-        private Double cardBalance; 
+    private String userPassword;
+    private String userAddress;
+    private String userEmail;
+    private String userPhone;
+    private double cardBalance;
+    
+    // all but id for auto increment
+	public Customer(String userName, String userPassword, String userAddress, String userEmail, String userPhone,
+			double cardBalance) {
+		super();
+		this.userName = userName;
+		this.userPassword = userPassword;
+		this.userAddress = userAddress;
+		this.userEmail = userEmail;
+		this.userPhone = userPhone;
+		this.cardBalance = cardBalance;
+	} 
+    
+    
 }
