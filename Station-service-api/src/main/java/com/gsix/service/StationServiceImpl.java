@@ -15,7 +15,7 @@ public class StationServiceImpl implements StationService {
 	
 	@Override
 	public Station searchStationById(int id) {
-		return stationDao.findById(id).orElse(null);
+		return stationDao.findById(id);
 	}
 
 	@Override
