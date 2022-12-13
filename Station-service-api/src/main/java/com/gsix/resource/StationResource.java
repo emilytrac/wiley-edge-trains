@@ -19,12 +19,12 @@ public class StationResource {
 	private StationService stationService;
 	
 	@GetMapping(path="/stations/{source}/{des}",produces = MediaType.TEXT_PLAIN_VALUE)
-	public double stationResource(@PathVariable("source") String source, @PathVariable("des") String des) {
-		return stationService.checkRouteCost(source, des);
+	public String stationCheckResource(@PathVariable("source") String source, @PathVariable("des") String des) {
+		return String.valueOf(stationService.checkRouteCost(source, des));
 	}
 	
 	@GetMapping(path = "stations/{stationName}", produces = MediaType.APPLICATION_JSON_VALUE)
-	    public Station stationResource(@PathVariable("stationName") String stationName) {
+	public Station stationResource(@PathVariable("stationName") String stationName) {
 	        return stationService.getStationByStationName(stationName);
 	}
 	

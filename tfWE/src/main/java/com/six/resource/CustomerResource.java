@@ -41,11 +41,11 @@ public class CustomerResource {
 			return "Insufficient funds";
 	}
 	
-	 @PutMapping(path = "/customers/{userId}/{amount}", produces = MediaType.TEXT_PLAIN_VALUE)
-	    public String updateBalanceResource(@PathVariable("userId") int userId, @PathVariable("inc") double inc) {
-	        if (customerService.updateBalance(userId, inc))
-	            return "Balance successfully updated with" + inc;
-	        else
-	            return "Something went wrong, please try again.";
-	    }
+	@PutMapping(path = "/customers/{userId}/{inc}", produces = MediaType.TEXT_PLAIN_VALUE)
+	public String updateBalanceResource(@PathVariable("userId") int userId, @PathVariable("inc") double inc) {
+	     if (customerService.updateBalance(userId, inc))
+	         return "Balance successfully updated with" + inc;
+	     else
+	         return "Something went wrong, please try again.";
+	}
 }

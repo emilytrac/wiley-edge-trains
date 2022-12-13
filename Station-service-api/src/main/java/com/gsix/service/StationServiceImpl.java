@@ -33,7 +33,7 @@ public class StationServiceImpl implements StationService {
 		int sourceId = source.getStationId();
 		int desId = des.getStationId();
 		
-		int distance = 0;
+		int distance;
 		
 		if (sourceId == desId) {
 			return 0;
