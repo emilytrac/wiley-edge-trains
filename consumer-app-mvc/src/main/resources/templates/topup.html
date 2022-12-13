@@ -1,12 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
 <h1>Transport for Wiley Edge</h1>
-<h2 th:text="${message}"></h2>
+<hr>
+<h3 th:text="'Top up here '+${session.user.userName}+'!'"></h3>
+<h3 th:text="'Your balance is '+${session.user.cardBalance}"></h3>
+<hr>
+<form th:action="@{/successfulTopUp}" method="post">
+	Enter amount :<input type="text" name="inc"><br><br>
+	<input type="submit" value="Top-up">
+</form>
 <br><br>
 <a href="./back">Go Back to Main Page</a>
 <a href="./logout">Logout</a>

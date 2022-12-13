@@ -19,9 +19,9 @@ public class Transaction {
 	private int transactionId;
 	private int userId;
 	private LocalDateTime swipeIn;
-	private String swipeInStationId;
+	private String swipeInStationName;
 	private LocalDateTime swipeOut;
-	private String swipeOutStationId;
+	private String swipeOutStationName;
 	private double fareCost;
 	
 }

@@ -4,7 +4,6 @@ import com.gsix.entity.Customer;
 import com.gsix.entity.Station;
 import com.gsix.entity.StationList;
 import com.gsix.entity.Transaction;
-import com.gsix.entity.TransactionList;
 
 public interface ConsumerService {
 
@@ -23,9 +22,9 @@ public interface ConsumerService {
     public double checkRoute(String sourceStation, String destinationStation);
     
     // save transaction
-    public Transaction saveTransaction(Transaction transaction, int userId);
+    public Transaction saveTransactionAndUpdateBalance(Transaction transaction, int userId);
     
-    public TransactionList showTransactionHistory(int userId);
+//  public TransactionList showTransactionHistory(int userId);
     
     public Station getStationByStationName(String stationName);
     

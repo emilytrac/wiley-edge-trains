@@ -1,26 +1,16 @@
 package com.gsix.model.serivce;
 
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 
 import com.gsix.entity.Customer;
 import com.gsix.entity.Station;
 import com.gsix.entity.StationList;
 import com.gsix.entity.Transaction;
-import com.gsix.entity.TransactionList;
 import com.gsix.model.persistence.ConsumerDao;
 
 @Service
@@ -32,6 +22,7 @@ public class ConsumerServiceImpl implements ConsumerService {
 	@Autowired
 	public ConsumerDao consumerDao;
 
+	// working
 	@Override
 	public Customer loginCheck(String userEmail, String userPassword) {
 		
@@ -47,6 +38,7 @@ public class ConsumerServiceImpl implements ConsumerService {
 		return customer;
 	}
 	
+	// working
 	@Override
 	public Customer addNewCustomer(String userName, String userPassword, String userAddress, String userEmail,
 			String userPhone, double cardBalance) {
@@ -91,25 +83,25 @@ public class ConsumerServiceImpl implements ConsumerService {
 	@Override
 	public Customer updateBalance(int userId, double inc) {
 		
-		HttpHeaders headers = new HttpHeaders();
-        
-        HttpEntity<Customer> entity = new HttpEntity<Customer>(headers);
-        
-		Customer customer = restTemplate.exchange("http://localhost:8082/customers/" + userId + "/" + inc, HttpMethod.PUT, entity, Customer.class).getBody();
-		
-		return customer;
+		 HttpHeaders headers = new HttpHeaders();
+	        
+	     HttpEntity<Customer> entity = new HttpEntity<Customer>(headers);
+	        
+	     Customer customer = restTemplate.exchange("http://localhost:8082/customers/" + userId + "/" + inc, HttpMethod.PUT, entity, Customer.class).getBody();
+	        
+	     return customer;
 	}
 
 	@Override
 	public double checkRoute(String sourceStation, String destinationStation) {
 		
-		double routeCost = restTemplate.getForObject("http://localhost:8084/stations/" + sourceStation + "/" + destinationStation, Double.class);
+		String routeCost = restTemplate.getForObject("http://localhost:8084/stations/" + sourceStation + "/" + destinationStation, String.class);
 		
-		return routeCost;
+		return Double.parseDouble(routeCost);
 	}
 
 	@Override
-	public Transaction saveTransaction(Transaction transaction, int userId) {
+	public Transaction saveTransactionAndUpdateBalance(Transaction transaction, int userId) {
 		
 		updateBalance(userId, -transaction.getFareCost());
 		
@@ -118,15 +110,15 @@ public class ConsumerServiceImpl implements ConsumerService {
 		return transaction;
 	}
 
-	@Override
-	public TransactionList showTransactionHistory(int userId) {
-		
-		TransactionList transactionList = new TransactionList();
-				
-		transactionList.setTransactions(consumerDao.searchTransactionByUserId(userId));
-		
-		return transactionList;
-	}
+//	@Override
+//	public TransactionList showTransactionHistory(int userId) {
+//		
+//		TransactionList transactionList = new TransactionList();
+//				
+//		transactionList.setTransactions(consumerDao.searchTransactionByUserId(userId));
+//		
+//		return transactionList;
+//	}
 
 	@Override
 	public Station getStationByStationName(String stationName) {

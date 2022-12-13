@@ -1,6 +1,10 @@
 package com.gsix.controller;
 
 import javax.servlet.http.HttpSession;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -14,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gsix.entity.Customer;
+import com.gsix.entity.Station;
+import com.gsix.entity.StationList;
+import com.gsix.entity.Transaction;
 import com.gsix.model.serivce.ConsumerService;
 
 @Controller
@@ -29,111 +36,192 @@ public class ConsumerController {
 			return new ModelAndView("index");
 		}
 		
-		// controllers for logging in
+		// controllers for logging in - working
 		
 		@RequestMapping("/loginPage")
 		public ModelAndView loginPageController() {
 			return new ModelAndView("loginpage");
 		}
 		
-			@RequestMapping("/login")
-			public ModelAndView getMainPageController(@RequestParam("userEmail") String userEmail, @RequestParam("userPassword") String userPassword, HttpSession session) {
+		@RequestMapping("/login")
+		public ModelAndView getMainPageController(@RequestParam("userEmail") String userEmail, @RequestParam("userPassword") String userPassword, HttpSession session) {
 				
-				ModelAndView modelAndView=new ModelAndView();
-				Customer customer = consumerService.loginCheck(userEmail, userPassword);
+			ModelAndView modelAndView=new ModelAndView();
+			Customer customer = consumerService.loginCheck(userEmail, userPassword);
 				
-				// successful login
-				if (customer != null) {
-					modelAndView.setViewName("homepage");
-					modelAndView.addObject("user", customer);
-					session.setAttribute("user", customer);
-				// login fails
-				} else {
-					modelAndView.addObject("message", "Invalid User Credentials, Please try again");
-					modelAndView.setViewName("loginpage");
-				}
-				return modelAndView;
-				
+			// successful login
+			if (customer != null) {
+				modelAndView.addObject("user", customer);
+				session.setAttribute("user", customer);
+				modelAndView.setViewName("homepage");
+			// login fails
+			} else {
+				modelAndView.addObject("message", "Invalid User Credentials, Please try again");
+				modelAndView.setViewName("loginpage");
 			}
+			return modelAndView;
+				
+		}
 	
 
-			// controllers for signing up
+		// controllers for signing up - working
 			
-			@RequestMapping("/registerNew")
-			public ModelAndView signUpPageController() {
-				return new ModelAndView("signup");
-			}
+		@RequestMapping("/registerNew")
+		public ModelAndView signUpPageController() {
+			return new ModelAndView("signup");
+		}
 			
-			@RequestMapping("/registerProcess")
-			public ModelAndView processRegisterController(@RequestParam("userName") String userName, @RequestParam("userPassword") String userPassword,
-					@RequestParam("userAddress") String userAddress, @RequestParam("userEmail") String userEmail,
-					@RequestParam("userPhone") String userPhone, @RequestParam("cardBalance") Double cardBalance, HttpSession session) {
+		@RequestMapping("/registerProcess")
+		public ModelAndView processRegisterController(@RequestParam("userName") String userName, @RequestParam("userPassword") String userPassword,
+				@RequestParam("userAddress") String userAddress, @RequestParam("userEmail") String userEmail,
+				@RequestParam("userPhone") String userPhone, @RequestParam("cardBalance") Double cardBalance, HttpSession session) {
 				
-				ModelAndView modelAndView=new ModelAndView();
-				Customer customer = consumerService.addNewCustomer(userName, userPassword, userAddress, userEmail, userPhone, cardBalance);
+			ModelAndView modelAndView=new ModelAndView();
+			Customer customer = consumerService.addNewCustomer(userName, userPassword, userAddress, userEmail, userPhone, cardBalance);
 				
-				if (customer != null) {
-					modelAndView.setViewName("registersuccess");
-				} else {
-				modelAndView.addObject("message", "Something went wrong! Please try again!");
-				modelAndView.setViewName("index");
-				}
-				return modelAndView;
+			if (customer != null) {
+				modelAndView.setViewName("registersuccess");
+			} else {
+			modelAndView.addObject("message", "Something went wrong! Please try again!");
+			modelAndView.setViewName("index");
+			}
+			return modelAndView;
 				
-			}
-			// controllers for topping up
+		}
+		
+		// controllers for topping up - api is working in postman, cannot get to work 406 error!!!
 			
-			@RequestMapping("/topUpPage")
-			public ModelAndView topUpAccountController() {
-				return new ModelAndView("topup");
-			}
+		@RequestMapping("/topUpPage")
+		public ModelAndView topUpAccountController() {
+			return new ModelAndView("topup");
+		}
 			
-			@RequestMapping("/successfulTopUp")
-			public ModelAndView topUpPageController(@RequestParam("inc") double inc, HttpServletRequest request, HttpSession session) {
+		@RequestMapping("/successfulTopUp")
+		public ModelAndView topUpPageController(@RequestParam("inc") double inc, HttpServletRequest request, HttpSession session) {
 				
-				ModelAndView modelAndView = new ModelAndView();
-				Customer customer = (Customer)session.getAttribute("user");
-				String message = null;
+			ModelAndView modelAndView = new ModelAndView();
+			Customer customer = (Customer)session.getAttribute("user");
+			String message = null;
+			int userId = customer.getUserId();
 				
-				if(consumerService.updateBalance(customer.getUserId(), inc) != null) {
-					message = "Your balance has now been increased by " + inc;
-				} else {
-					message = "top-up failed, please try again";
-				}
+			if(consumerService.updateBalance(userId, inc) != null) {
+				message = "Your balance has now been increased by " + inc;
+			} else {
+				message = "top-up failed, please try again";
+			}
 				
-				session.setAttribute("user", customer);
-				modelAndView.addObject("message", message);
-				modelAndView.setViewName("topupoutput");
+//			session.setAttribute("user", customer);
+			modelAndView.addObject("message", message);
+			modelAndView.setViewName("output");
 				
-				return modelAndView;
+			return modelAndView;
+		}
+			
+		// controllers for swiping in - working!
+			
+		@RequestMapping("/swipeIn")
+		public ModelAndView swipeInController() {
+				
+			// allowing for the user to have a drop-down list to choose from
+			ModelAndView modelAndView = new ModelAndView();
+			StationList stations = consumerService.showAllStations();
+			List<Station> listStations = stations.getStations();
+				
+			modelAndView.addObject("listStations", listStations);
+			modelAndView.setViewName("swipein");
+				
+			return modelAndView;
+			//return new ModelAndView("swipein");
+		}
+			
+		@RequestMapping("/swipedIn")
+		public ModelAndView swipedInController(@RequestParam("stationName") String stationName, HttpSession session) {
+				
+			Transaction transaction = new Transaction();
+			ModelAndView modelAndView = new ModelAndView();
+			LocalDateTime dateTime = LocalDateTime.now();
+			Customer customer = (Customer)session.getAttribute("user");
+			String message = null;
+				
+			if (consumerService.balanceCheck(customer.getUserId()).equals("Insufficient funds")) {
+				message = "You do not have enough money. Please top up";
+					
+			} else {
+				String startStation = stationName;
+					
+				transaction.setUserId(customer.getUserId());
+				transaction.setSwipeIn(dateTime);
+				transaction.setSwipeInStationName(stationName);
+					
+				message = "You have swiped in at " + startStation;
 			}
+				
+			// output with message page needed
+			modelAndView.addObject("message", message);
+			session.setAttribute("transaction", transaction);
+			modelAndView.setViewName("output");
+				
+			return modelAndView;
+				
+		}
 			
-			// controllers for swiping in
+		// controllers for swiping out - not working 406 error
 			
-			@RequestMapping("/swipeIn")
-			public ModelAndView swipeInController() {
-				return new ModelAndView("swipein");
-			}
+		@RequestMapping("/swipeOut")
+		public ModelAndView swipeOutController() {
 			
-			// controllers for swiping out 
+			// allowing for the user to have a drop-down list to choose from
+			ModelAndView modelAndView = new ModelAndView();
+			StationList stations = consumerService.showAllStations();
+			List<Station> listStations = stations.getStations();
+				
+			modelAndView.addObject("listStations", listStations);
+			modelAndView.setViewName("swipeout");
+				
+			return modelAndView;
+			//return new ModelAndView("swipeout");
+		}
 			
-			@RequestMapping("/swipeOut")
-			public ModelAndView swipeOutController() {
-				return new ModelAndView("swipeout");
-			}
+		@RequestMapping("/swipedOut")
+		public ModelAndView swipedOutController(@RequestParam("stationName") String stationName, HttpSession session) {
+				
+			ModelAndView modelAndView = new ModelAndView();
+			Transaction transaction = (Transaction)session.getAttribute("transaction");
+			LocalDateTime dateTime = LocalDateTime.now();
+			Customer customer = (Customer)session.getAttribute("user");
+			String message = null;
+				
+			String endStation = stationName;
+				
+			transaction.setSwipeOutStationName(stationName);
+			transaction.setSwipeOut(dateTime);
+				
+			Double fare = consumerService.checkRoute(transaction.getSwipeInStationName(), endStation);
+				
+			transaction.setFareCost(fare);
+				
+			consumerService.saveTransactionAndUpdateBalance(transaction, customer.getUserId());
+				
+			message = "You have swiped out at " + endStation + " ,your remaining balance is " + customer.getCardBalance();
+				
+			modelAndView.addObject("message", message);
+			session.setAttribute("user", customer);
+			modelAndView.setViewName("output");
+			return modelAndView;
+		}
 			
-			// return to home page
+		// return to home page
 			
-			@RequestMapping("/back")
-			public ModelAndView returnToMainPageController() {
-				return new ModelAndView("homepage");
-			}
+		@RequestMapping("/back")
+		public ModelAndView returnToMainPageController() {
+			return new ModelAndView("homepage");
+		}
 			
-			// return to login/sign up page
+		// return to login/sign up page
 			
-			@RequestMapping("/logout")
-			public ModelAndView logoutController() {
-				return new ModelAndView("index");
-			}
+		@RequestMapping("/logout")
+		public ModelAndView logoutController() {
+			return new ModelAndView("index");
+		}
 	
 }
