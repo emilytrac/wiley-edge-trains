@@ -10,10 +10,22 @@ import lombok.NoArgsConstructor;
 //@Table(name="Customer")
 public class Customer {
 
-        private String userName;
-        private String userPassword;
-        private String userAddress;
-        private String userEmail;
-        private String userPhone;
-        private Double cardBalance; 
+	private int userId;
+	private String userName;
+    private String userPassword;
+    private String userAddress;
+    private String userEmail;
+    private String userPhone;
+    private double cardBalance;
+    
+    // all but id for auto increment
+	public Customer(String userName, String userPassword, String userAddress, String userEmail, String userPhone,
+			double cardBalance) {
+		this.userName = userName;
+		this.userPassword = userPassword;
+		this.userAddress = userAddress;
+		this.userEmail = userEmail;
+		this.userPhone = userPhone;
+		this.cardBalance = cardBalance;
+	} 
 }

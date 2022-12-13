@@ -17,6 +17,7 @@ public class Transaction {
 
 	@Id
 	private int transactionId;
+	private int userId;
 	private LocalDateTime swipeIn;
 	private String swipeInStationId;
 	private LocalDateTime swipeOut;
