@@ -14,7 +14,7 @@ public interface StationDao extends JpaRepository<Station, Integer> {
 
 	public Station searchStationByStationName(String stationName);
 	
-	public Collection<Station> getAllStations();
+//	public Collection<Station> getAllStations();
 	
 
 }

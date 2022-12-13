@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gsix.entity.Station;
+import com.gsix.entity.StationList;
 import com.gsix.persistence.StationDao;
 
 @Service
@@ -14,8 +15,13 @@ public class StationServiceImpl implements StationService {
 	private StationDao stationDao;
 
 	@Override
-	public Collection<Station> getAllStations() {
-		return stationDao.findAll();
+	public StationList getAllStations() {
+		
+		StationList stationList = new StationList();
+		
+		stationList.setStations(stationDao.findAll());
+		
+		return stationList;
 	}
 
 	static final double ADJACENT_STATIONS = 5.00;
@@ -40,6 +46,12 @@ public class StationServiceImpl implements StationService {
 		double price = ADJACENT_STATIONS * distance;
 		
 		return price;
+	}
+
+	@Override
+	public Station getStationByStationName(String stationName) {
+		
+		return stationDao.searchStationByStationName(stationName);
 	}
 
 }

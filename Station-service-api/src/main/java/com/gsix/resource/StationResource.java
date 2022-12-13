@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gsix.entity.Station;
+import com.gsix.entity.StationList;
 import com.gsix.service.StationService;
 
 @RestController
@@ -22,8 +23,13 @@ public class StationResource {
 		return stationService.checkRouteCost(source, des);
 	}
 	
+	@GetMapping(path = "stations/{stationName}", produces = MediaType.APPLICATION_JSON_VALUE)
+	    public Station stationResource(@PathVariable("stationName") String stationName) {
+	        return stationService.getStationByStationName(stationName);
+	}
+	
 	@GetMapping(path = "/stations",produces =MediaType.APPLICATION_JSON_VALUE)
-	public Collection<Station> getAllStationResource(){
+	public StationList getAllStationResource(){
 		return stationService.getAllStations();
 	}
 }
