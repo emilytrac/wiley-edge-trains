@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html xmlns:th="https://thymeleaf.org" >
+<head>
+    <title> Transport for Wiley Edge </title>
+    <meta charset="UTF-8">
+</head>
+<body>
+ <h1> Central Metro System </h1>
+<br></br>
+<div class="main-container">
+    
+    <!-- output message -->
+    <table>
+            
+        <tr>
+            <td>
+                <h3 th:text="${message}">  </h3>
+
+            </td>
+        </tr>
+        
+        <br></br>
+        <!-- return to home -->
+        <tr>
+            <td class="return-to-home">
+                <a href="./back"> Return To Home</a>
+            </td>
+        </tr>
+        
+    </table>
+</div>
+    
+    
+</body>
+</html>

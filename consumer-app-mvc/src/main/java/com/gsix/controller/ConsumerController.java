@@ -1,5 +1,9 @@
 package com.gsix.controller;
 
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
@@ -33,15 +37,20 @@ public class ConsumerController {
 		}
 		
 			@RequestMapping("/login")
-			public ModelAndView getMainPageController(@RequestParam("userEmail") String userEmail, @RequestParam("userPassword") String userPassword) {
+			public ModelAndView getMainPageController(@RequestParam("userEmail") String userEmail, @RequestParam("userPassword") String userPassword, HttpSession session) {
 				
 				ModelAndView modelAndView=new ModelAndView();
+				Customer customer = consumerService.loginCheck(userEmail, userPassword);
 				
-				if (consumerService.loginCheck(userEmail, userPassword)) {
+				// successful login
+				if (customer != null) {
 					modelAndView.setViewName("homepage");
+					modelAndView.addObject("user", customer);
+					session.setAttribute("user", customer);
+				// login fails
 				} else {
 					modelAndView.addObject("message", "Invalid User Credentials, Please try again");
-					modelAndView.setViewName("index");
+					modelAndView.setViewName("loginpage");
 				}
 				return modelAndView;
 				
@@ -55,19 +64,18 @@ public class ConsumerController {
 				return new ModelAndView("signup");
 			}
 			
-			@RequestMapping("/signup")
+			@RequestMapping("/registerProcess")
 			public ModelAndView processRegisterController(@RequestParam("userName") String userName, @RequestParam("userPassword") String userPassword,
 					@RequestParam("userAddress") String userAddress, @RequestParam("userEmail") String userEmail,
-					@RequestParam("userPhone") String userPhone, @RequestParam("cardBalance") Double cardBalance) {
-				Customer customer = new Customer(userName, userPassword, userAddress, userEmail, userPhone, cardBalance);
+					@RequestParam("userPhone") String userPhone, @RequestParam("cardBalance") Double cardBalance, HttpSession session) {
 				
 				ModelAndView modelAndView=new ModelAndView();
+				Customer customer = consumerService.addNewCustomer(userName, userPassword, userAddress, userEmail, userPhone, cardBalance);
 				
-				if (consumerService.emailCheckExists(userEmail)) {
-		  		    consumerService.createProducts(customer);
-					return new ModelAndView("registersuccess");
+				if (customer != null) {
+					modelAndView.setViewName("registersuccess");
 				} else {
-				modelAndView.addObject("message", "Email is already taken! Please try again!");
+				modelAndView.addObject("message", "Something went wrong! Please try again!");
 				modelAndView.setViewName("index");
 				}
 				return modelAndView;
@@ -78,6 +86,26 @@ public class ConsumerController {
 			@RequestMapping("/topUpPage")
 			public ModelAndView topUpAccountController() {
 				return new ModelAndView("topup");
+			}
+			
+			@RequestMapping("/successfulTopUp")
+			public ModelAndView topUpPageController(@RequestParam("inc") double inc, HttpServletRequest request, HttpSession session) {
+				
+				ModelAndView modelAndView = new ModelAndView();
+				Customer customer = (Customer)session.getAttribute("user");
+				String message = null;
+				
+				if(consumerService.updateBalance(customer.getUserId(), inc) != null) {
+					message = "Your balance has now been increased by " + inc;
+				} else {
+					message = "top-up failed, please try again";
+				}
+				
+				session.setAttribute("user", customer);
+				modelAndView.addObject("message", message);
+				modelAndView.setViewName("topupoutput");
+				
+				return modelAndView;
 			}
 			
 			// controllers for swiping in
