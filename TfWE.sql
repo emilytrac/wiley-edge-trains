@@ -32,8 +32,11 @@ stationName varchar(20) not null);
 describe Station;
 
 insert into Station(stationId, stationName)
-values(01, "L1"),
-(02, "L2");
+values(01, "St. Enum"),
+(02, "Void Park"),
+(03, "Transient Lane"),
+(04, "Super Street "),
+(05, "Final Hill");
 
 select * from Station;
 
@@ -41,16 +44,17 @@ select * from Station;
 
 create table Transaction(
 transactionId int auto_increment primary key,
+userId int,
 swipeIn datetime,
-swipeInStationId varchar(20),
+swipeInStationName varchar(20),
 swipeOut datetime,
-swipeOutStationId varchar(20),
+swipeOutStationName varchar(20),
 fareCost double not null);
 
 describe Transaction;
 
-insert into Transaction(swipeIn,swipeInStationId,swipeOut,swipeOutStationId,fareCost)
-values("2022-12-07 14:06:30", "L1", "2022-12-07 15:10:30", "L2",5.00), 
-("2022-12-07 05:06:30", "L1", "2022-12-07 12:10:30", "L3",10.00);
+insert into Transaction(userId,swipeIn,swipeInStationName,swipeOut,swipeOutStationName,fareCost)
+values("2022-12-07 14:06:30", "St. Enum", "2022-12-07 15:10:30", "Void Park",5.00), 
+("2022-12-07 05:06:30", "St. Enum", "2022-12-07 12:10:30", "Transient Lane",10.00);
 
 select * from Transaction;
