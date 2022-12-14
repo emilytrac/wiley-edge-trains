@@ -29,10 +29,12 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 	}
     
+    // minor change
     @Override
     public Customer addCustomer(Customer customer) {
 	     
-    	if (customerDao.findByUserEmailAndUserPassword(customer.getUserName(), customer.getUserPassword()) == null) {
+    	if (customerDao.findByUserEmailAndUserPassword(customer.getUserName(), customer.getUserPassword()) == null 
+    			&& customer.getCardBalance() >=100) {
     		
     		customerDao.save(customer);
     		return customer;
