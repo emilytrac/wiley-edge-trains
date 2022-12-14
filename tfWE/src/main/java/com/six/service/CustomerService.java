@@ -1,8 +1,6 @@
 package com.six.service;
 
 import com.six.entity.Customer;
-import java.util.Collection;
-import java.util.List;
 
 public interface CustomerService {
 
@@ -14,6 +12,6 @@ public interface CustomerService {
     
     boolean balanceCheck(int userId);
     
-    boolean updateBalance(int userId, double inc);
+    Customer updateBalance(int userId, double inc);
         
 }

@@ -2,9 +2,6 @@ package com.six.service;
 
 import com.six.entity.Customer;
 import com.six.persistence.CustomerDao;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.Collection;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,14 +51,14 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public boolean updateBalance(int userId, double inc) {
+	public Customer updateBalance(int userId, double inc) {
 		Customer customer = customerDao.findById(userId).orElse(null);
 		if (customer != null) {
 			customer.setCardBalance(customer.getCardBalance() + inc);
 			customerDao.save(customer);
-			return true;
+			return customer;
 		} else {
-			return false;
+			return null;
 		}
 	}
 }
