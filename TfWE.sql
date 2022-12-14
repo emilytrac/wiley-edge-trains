@@ -54,7 +54,7 @@ fareCost double not null);
 describe Transaction;
 
 insert into Transaction(userId,swipeIn,swipeInStationName,swipeOut,swipeOutStationName,fareCost)
-values("2022-12-07 14:06:30", "St. Enum", "2022-12-07 15:10:30", "Void Park",5.00), 
-("2022-12-07 05:06:30", "St. Enum", "2022-12-07 12:10:30", "Transient Lane",10.00);
+values(1, "2022-12-07 14:06:30", "St. Enum", "2022-12-07 15:10:30", "Void Park",5.00), 
+(1, "2022-12-07 05:06:30", "St. Enum", "2022-12-07 12:10:30", "Transient Lane",10.00);
 
 select * from Transaction;
