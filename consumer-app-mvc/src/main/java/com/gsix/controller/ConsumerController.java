@@ -6,14 +6,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,14 +25,14 @@ public class ConsumerController {
 	@Autowired
 	private ConsumerService consumerService;
 
-	// controller to show to first page of an application
+		// controller to show to show the login/sign up page of the application
 	
 		@RequestMapping("/")
 		public ModelAndView getLoginOrSignUpPageController() {
 			return new ModelAndView("index");
 		}
 		
-		// controllers for logging in - working
+		// controllers for logging in
 		
 		@RequestMapping("/loginPage")
 		public ModelAndView loginPageController() {
@@ -64,7 +60,7 @@ public class ConsumerController {
 		}
 	
 
-		// controllers for signing up - is allowing less than 20 - working fully
+		// controllers for signing up to the application
 			
 		@RequestMapping("/registerNew")
 		public ModelAndView signUpPageController() {
@@ -80,13 +76,12 @@ public class ConsumerController {
 			Customer customer = consumerService.addNewCustomer(userName, userPassword, userAddress, userEmail, userPhone, cardBalance);
 			String message;
 				
+			// successful
 			if (customer != null) {
-				message = "Account added, Please login to continue.";
-//				modelAndView.setViewName("index");
-//				modelAndView.setViewName("registersuccess");
+				message = "Account added, please login to continue.";
+			// unsuccessful	
 			} else {
-				message = "Something went wrong, this account may already exist or funds may be insufficient.";
-//				modelAndView.setViewName("index");
+				message = "Something went wrong, this account may already exist or sign up funds may be insufficient.";
 			}
 			
 			modelAndView.addObject("message", message);
@@ -95,7 +90,7 @@ public class ConsumerController {
 				
 		}
 		
-		// controllers for topping up - balance is not updating
+		// controllers for topping up the balance
 			
 		@RequestMapping("/topUpPage")
 		public ModelAndView topUpAccountController() {
@@ -110,12 +105,15 @@ public class ConsumerController {
 			String message = null;
 			int userId = customer.getUserId();
 			
-			if (inc < 0) {
+			// ensuring only amount greater than 0 can be entered
+			if (inc <= 0) {
 				message = "Top-up failed, amount entered negative";
 			} else {
+				// successful
 				if(consumerService.updateBalance(userId, inc) != null) {
 					message = "Your balance has now been increased by ₹" + inc;
 					customer.setCardBalance(customer.getCardBalance() + inc);
+				// unsuccessful
 				} else {
 					message = "Top-up failed, please try again!";
 				}
@@ -128,7 +126,7 @@ public class ConsumerController {
 			return modelAndView;
 		}
 			
-		// controllers for swiping in - working!
+		// controllers for swiping in
 			
 		@RequestMapping("/swipeIn")
 		public ModelAndView swipeInController() {
@@ -142,7 +140,6 @@ public class ConsumerController {
 			modelAndView.setViewName("swipein");
 				
 			return modelAndView;
-			//return new ModelAndView(“swipein”);
 		}
 			
 		@RequestMapping("/swipedIn")
@@ -154,9 +151,11 @@ public class ConsumerController {
 			Customer customer = (Customer)session.getAttribute("user");
 			String message = null;
 				
+			// checking that the customer has enough money
 			if (consumerService.balanceCheck(customer.getUserId()).equals("Insufficient funds")) {
 				message = "You do not have enough money. Please Top-up";
 					
+			// begin filling in transaction object
 			} else {
 				String startStation = stationName;
 					
@@ -167,8 +166,8 @@ public class ConsumerController {
 				message = "You have swiped in at " + startStation;
 			}
 				
-			// output with message page needed
 			modelAndView.addObject("message", message);
+			// create session for transaction to continue adding to the object
 			session.setAttribute("transaction", transaction);
 			modelAndView.setViewName("output");
 				
@@ -176,7 +175,7 @@ public class ConsumerController {
 				
 		}
 			
-		// controllers for swiping out - fully working
+		// controllers for swiping out
 			
 		@RequestMapping("/swipeOut")
 		public ModelAndView swipeOutController() {
@@ -190,7 +189,6 @@ public class ConsumerController {
 			modelAndView.setViewName("swipeout");
 				
 			return modelAndView;
-			//return new ModelAndView(“swipeout”);
 		}
 			
 		@RequestMapping("/swipedOut")
@@ -207,13 +205,15 @@ public class ConsumerController {
 			transaction.setSwipeOutStationName(stationName);
 			transaction.setSwipeOut(dateTime);
 				
+			// getting the cost of the journey based on swipe out station
 			Double fare = consumerService.checkRoute(transaction.getSwipeInStationName(), endStation);
 				
 			transaction.setFareCost(fare);
 				
+			// saving the transaction object to the database and updating the balance in the customer table
 			consumerService.saveTransactionAndUpdateBalance(transaction, customer.getUserId());
 				
-			message = "You have swiped out at " + endStation + ", your remaining balance is ₹" + (customer.getCardBalance()-fare);
+			message = "You have swiped out at " + endStation + ", your remaining balance is ₹ " + (customer.getCardBalance()-fare);
 				
 			modelAndView.addObject("message", message);
 			customer.setCardBalance(customer.getCardBalance() - fare);
@@ -230,6 +230,7 @@ public class ConsumerController {
 			ModelAndView modelAndView = new ModelAndView();
 			Customer customer = (Customer)session.getAttribute("user");
 			
+			// getting all of the transactions that the customer has made into a list
 			List<Transaction> transactions = consumerService.showTransactionHistory(customer.getUserId()).getTransactions();
 			modelAndView.addObject("transactions", transactions);
 			modelAndView.setViewName("alltransactions");

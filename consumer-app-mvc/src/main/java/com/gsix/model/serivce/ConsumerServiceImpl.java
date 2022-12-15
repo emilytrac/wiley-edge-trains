@@ -23,23 +23,16 @@ public class ConsumerServiceImpl implements ConsumerService {
 	@Autowired
 	public ConsumerDao consumerDao;
 
-	// working
+	// calling REST API to get customer object for login - then used to set session
 	@Override
 	public Customer loginCheck(String userEmail, String userPassword) {
 		
 		Customer customer = restTemplate.getForObject("http://localhost:8082/customers/" + userEmail + "/" + userPassword, Customer.class);
 		
-//		try {
-//			if (customer.getUserEmail().equals(userEmail) && customer.getUserPassword().equals(userPassword)) {
-//				return true;
-//			}
-//		} catch (Exception e) {
-//			return false;
-//		}
 		return customer;
 	}
 	
-	// working - edited
+	// calling REST API to add a new customer following collection of info needed
 	@Override
 	public Customer addNewCustomer(String userName, String userPassword, String userAddress, String userEmail,
 			String userPhone, double cardBalance) {
@@ -62,6 +55,7 @@ public class ConsumerServiceImpl implements ConsumerService {
 		}
 	}
 
+	// calling REST API to check customer balance
 	@Override
 	public String balanceCheck(int userId) {
 		
@@ -70,6 +64,7 @@ public class ConsumerServiceImpl implements ConsumerService {
 		return balance;
 	}
 
+	// calling REST API to update the balance
 	@Override
 	public Customer updateBalance(int userId, double inc) {
 		
@@ -82,6 +77,7 @@ public class ConsumerServiceImpl implements ConsumerService {
 	     return customer;
 	}
 
+	// calling REST API to check the cost of the route
 	@Override
 	public double checkRoute(String sourceStation, String destinationStation) {
 		
@@ -90,6 +86,7 @@ public class ConsumerServiceImpl implements ConsumerService {
 		return Double.parseDouble(routeCost);
 	}
 
+	// saving the transaction and updating the customer balance based on the fare price
 	@Override
 	public Transaction saveTransactionAndUpdateBalance(Transaction transaction, int userId) {
 		
@@ -100,6 +97,7 @@ public class ConsumerServiceImpl implements ConsumerService {
 		return transaction;
 	}
 
+	// calling REST API to get station object for swipe in/swipe out
 	@Override
 	public Station getStationByStationName(String stationName) {
 		
@@ -108,6 +106,7 @@ public class ConsumerServiceImpl implements ConsumerService {
 		return station;
 	}
 
+	// calling REST API to list all the stations
 	@Override
 	public StationList showAllStations() {
 		
@@ -116,6 +115,7 @@ public class ConsumerServiceImpl implements ConsumerService {
 		return stations;
 	}
 
+	// creating a list of transaction objects carried out by a user
 	@Override
 	public TransactionList showTransactionHistory(int userId) {
 		

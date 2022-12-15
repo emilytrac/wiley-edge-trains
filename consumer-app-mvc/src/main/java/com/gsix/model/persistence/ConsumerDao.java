@@ -10,8 +10,7 @@ import com.gsix.entity.Transaction;
 @Repository
 public interface ConsumerDao extends JpaRepository<Transaction, Integer> {
 	
+	//return a list of transactions that a particular user has made
 	public List<Transaction> searchTransactionByUserId(int userId);
-//	
-//	public Transaction searchTransactionByUserIdAndSwipeOut(int userId, LocalDateTime swipeOut);
 
 }
