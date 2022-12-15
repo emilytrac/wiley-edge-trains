@@ -45,7 +45,7 @@ class TestStationService {
 		autoCloseable.close();
 	}
 
-    // postive test
+    // positive
     @Test
     void getAllStationsPos() {
     	
@@ -58,7 +58,7 @@ class TestStationService {
     	assertEquals(stations, stationServiceImpl.getAllStations().getStations());
     }
     
-    // negative test
+    // negative
     @Test
     void getAllStationsNeg() {
     	
@@ -70,7 +70,7 @@ class TestStationService {
 
     //checking the search by name method 
     @Test
-    void searchStationByNamePos() {
+    void searchStationByNameTest() {
     	Station station = new Station(02, "Waterloo");
     	when(stationdao.searchStationByStationName("Waterloo")).thenReturn(station);
     	assertEquals(station, stationServiceImpl.getStationByStationName("Waterloo"));

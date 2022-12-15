@@ -38,7 +38,7 @@ class TestCustomerService {
         autoCloseable.close();
     }
     
-    // positive test
+    // positive
     @Test
     void testLoginCheckPos(){
     	
@@ -48,7 +48,7 @@ class TestCustomerService {
         assertEquals(customer, customerServiceImpl.loginCheck("t.person@gmail.com", "Password10"));
     }
     
-    //negative test
+    //negative
     @Test
     void testLoginCheckNeg(){
     	
@@ -59,31 +59,29 @@ class TestCustomerService {
     			
     }
 
-    // positive test
+    // positive
     @Test
     void testAddCustomerPos() throws SQLIntegrityConstraintViolationException{
     	
     	Customer customer = new Customer(10, "Test Person", "Password10", "Address10", "t.person@gmail.com", "07877878761", 100.0);
-//        when(customerDao.insertCustomer(5, "Joe Doe", "Password5", "Address5", "joe.doe@gmail.com", "07877878762", 100.0)).thenReturn(1);
-//        assertFalse(customerServiceImpl.addCustomer(new Customer(5, "Joe Doe", "Password5", "Address5", "joe.doe@gmail.com", "07877878762", 100.0)));
+
     	when(customerDao.findByUserEmailAndUserPassword("t.person@gmail.com", "Password10")).thenReturn(null);
     	assertEquals(customer, customerServiceImpl.addCustomer(customer));
     }
 //
-    //negative test
+    //negative
     @Test
     void testAddCustomerNeg() throws SQLIntegrityConstraintViolationException{
     	
     	Customer customer = new Customer(11, "Test Two", "Password11", "Address11", "t.two@gmail.com", "07877878763", 90.0);
-//        when(customerDao.insertCustomer(5, "Joe Doe", "Password5", "Address5", "joe.doe@gmail.com", "07877878762", 100.0)).thenReturn(1);
-//        assertFalse(customerServiceImpl.addCustomer(new Customer(5, "Joe Doe", "Password5", "Address5", "joe.doe@gmail.com", "07877878762", 100.0)));
+//
     	when(customerDao.findByUserEmailAndUserPassword("t.two@gmail.com", "Password11")).thenReturn(customer);
     	assertEquals(null, customerServiceImpl.addCustomer(customer));
     }
     
     // negative
     @Test
-    void testBalanceCheckOne() {
+    void testBalanceCheckNeg() {
 
         Customer customer = new Customer(11, "Test Two", "Password11", "Address11", "t.two@gmail.com", "07877878763", 15.0);
 
@@ -91,9 +89,9 @@ class TestCustomerService {
         assertFalse(customerServiceImpl.balanceCheck(11));
     }
 
-    // positve 
+    // positive 
    @Test
-   void testBalanceCheckTwo() {
+   void testBalanceCheckPos() {
 
        Customer customer = new Customer(10, "Test Person", "Password10", "Address10", "t.person@gmail.com", "07877878761", 100.0);
 
@@ -103,7 +101,7 @@ class TestCustomerService {
    
    // positive
    @Test
-   void testUpdateBalanceOne() {
+   void testUpdateBalancePos() {
 	   
 	   Customer customer = new Customer(11, "Test Two", "Password11", "Address11", "t.two@gmail.com", "07877878763", 100.0);
 	   
@@ -113,7 +111,7 @@ class TestCustomerService {
    
    // negative
    @Test
-   void testUpdateBalanceTwo() {
+   void testUpdateBalanceNeg() {
 	   
 	   //Customer customer = new Customer(10, "Test Person", "Password10", "Address10", "t.person@gmail.com", "07877878761", 100.0);
 	   
