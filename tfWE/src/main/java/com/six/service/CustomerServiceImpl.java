@@ -14,12 +14,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private CustomerDao customerDao;
 
-//    @Override
-//    public Collection<Customer> getAllCustomers() {
-//        return customerDao.findAll();
-//    }
-
-
+    // logging in if the customer exists in the database
     @Override
 	public Customer loginCheck(String userEmail, String userPassword) {
 		try {
@@ -32,19 +27,23 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 	}
     
-    // minor change
+    // adding a customer if they don't already exist, email is unique so cannot enter if duplicate
     @Override
     public Customer addCustomer(Customer customer) throws SQLIntegrityConstraintViolationException {
-	     
-    	if (customerDao.findByUserEmailAndUserPassword(customer.getUserEmail(), customer.getUserPassword()) == null 
-    			&& customer.getCardBalance() >=100) {
-    		customerDao.save(customer);
-    		return customer;
-    	} else {
-    		return null;
-    	}
+	    try { 
+	    	if (customerDao.findByUserEmailAndUserPassword(customer.getUserEmail(), customer.getUserPassword()) == null 
+	    			&& customer.getCardBalance() >=100) {
+	    		customerDao.save(customer);
+	    		return customer;
+	    	} else {
+	    		return null;
+	    	} 
+	    } catch (Exception e) {
+			return null;
+		}
     }
 
+    // checking that the customer has sufficient balance to swipe into the application
 	@Override
 	public boolean balanceCheck(int userId) {
 		Customer customer = customerDao.findById(userId).orElse(null);
@@ -54,6 +53,7 @@ public class CustomerServiceImpl implements CustomerService {
 			return false;
 	}
 
+	// updating the customer balance after the customer swipes out
 	@Override
 	public Customer updateBalance(int userId, double inc) {
 		Customer customer = customerDao.findById(userId).orElse(null);
@@ -65,4 +65,5 @@ public class CustomerServiceImpl implements CustomerService {
 			return null;
 		}
 	}
+
 }

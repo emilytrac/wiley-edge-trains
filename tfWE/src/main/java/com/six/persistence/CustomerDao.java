@@ -2,7 +2,6 @@ package com.six.persistence;
 
 import com.six.entity.Customer;
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.time.LocalDate;
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
