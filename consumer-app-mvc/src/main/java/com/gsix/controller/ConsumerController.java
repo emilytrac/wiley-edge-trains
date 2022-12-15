@@ -56,7 +56,7 @@ public class ConsumerController {
 				modelAndView.setViewName("homepage");
 			// login fails
 			} else {
-				modelAndView.addObject("message", "Invalid User Credentials, Please Try Again");
+				modelAndView.addObject("message", "Invalid user credentials, please try again!");
 				modelAndView.setViewName("loginpage");
 			}
 			return modelAndView;
@@ -81,11 +81,11 @@ public class ConsumerController {
 			String message;
 				
 			if (customer != null) {
-				message = "Account Added, Please Login To Continue.";
+				message = "Account added, Please login to continue.";
 //				modelAndView.setViewName("index");
 //				modelAndView.setViewName("registersuccess");
 			} else {
-				message = "Something Went Wrong, This Account May Already Exist Or Funds May Be Insufficient.";
+				message = "Something went wrong, this account may already exist or funds may be insufficient.";
 //				modelAndView.setViewName("index");
 			}
 			
@@ -111,13 +111,13 @@ public class ConsumerController {
 			int userId = customer.getUserId();
 			
 			if (inc < 0) {
-				message = "Top-up Failed, Amount Entered Negative";
+				message = "Top-up failed, amount entered negative";
 			} else {
 				if(consumerService.updateBalance(userId, inc) != null) {
-					message = "Your Balance Has Now Been Increased By " + inc;
+					message = "Your balance has now been increased by ₹" + inc;
 					customer.setCardBalance(customer.getCardBalance() + inc);
 				} else {
-					message = "Top-up Failed, Please Try Again";
+					message = "Top-up failed, please try again!";
 				}
 			}
 			
@@ -142,7 +142,7 @@ public class ConsumerController {
 			modelAndView.setViewName("swipein");
 				
 			return modelAndView;
-			//return new ModelAndView("swipein");
+			//return new ModelAndView(“swipein”);
 		}
 			
 		@RequestMapping("/swipedIn")
@@ -155,7 +155,7 @@ public class ConsumerController {
 			String message = null;
 				
 			if (consumerService.balanceCheck(customer.getUserId()).equals("Insufficient funds")) {
-				message = "You Do Not Have Enough Money. Please Top-up";
+				message = "You do not have enough money. Please Top-up";
 					
 			} else {
 				String startStation = stationName;
@@ -164,7 +164,7 @@ public class ConsumerController {
 				transaction.setSwipeIn(dateTime);
 				transaction.setSwipeInStationName(stationName);
 					
-				message = "You Have Swiped In At " + startStation;
+				message = "You have swiped in at " + startStation;
 			}
 				
 			// output with message page needed
@@ -190,7 +190,7 @@ public class ConsumerController {
 			modelAndView.setViewName("swipeout");
 				
 			return modelAndView;
-			//return new ModelAndView("swipeout");
+			//return new ModelAndView(“swipeout”);
 		}
 			
 		@RequestMapping("/swipedOut")
@@ -213,7 +213,7 @@ public class ConsumerController {
 				
 			consumerService.saveTransactionAndUpdateBalance(transaction, customer.getUserId());
 				
-			message = "You Have Swiped Out At " + endStation + " ,Your Remaining Balance Is " + (customer.getCardBalance()-fare);
+			message = "You have swiped out at " + endStation + ", your remaining balance is ₹" + (customer.getCardBalance()-fare);
 				
 			modelAndView.addObject("message", message);
 			customer.setCardBalance(customer.getCardBalance() - fare);

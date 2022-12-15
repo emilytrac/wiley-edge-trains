@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<link th:href="@{css/signup.css}" rel="stylesheet"/>
 <head>
     <meta charset="ISO-8859-1">
-    <title></title>
+    <title>TfWE</title>
 </head>
 <body>
-    <div class="container text-center">
+	<header>
+		<img class="logo" src="images/logo.jpg" alt="logo">
+
+		<a class="cta" href="./"><button>Return to Homepage</button></a>
+	</header>
+	<section>
+		<div class="container text-center">
         <div>
-            <h1>User Registration - Sign Up</h1>
+            <h1>User Registration</h1>
         </div>
         <form th:action="@{/registerProcess}" method="post" style="max-width: 600px; margin: 0 auto;">
         <div class="m-3">
@@ -56,12 +63,14 @@
                     <input type="number" name="cardBalance" class="form-control"/>
                 </div>
             </div>
-             
+            <br>
             <div>
-                <button type="submit" class="btn btn-primary">Sign Up</button>
+                <input type="submit" value="Sign Up">
             </div>
         </div>
         </form>
-    </div>
+    	</div>
+	</section>
+    
 </body>
 </html>

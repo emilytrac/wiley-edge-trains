@@ -1,14 +1,22 @@
 <!DOCTYPE html>
-<html xmlns:th="https://thymeleaf.org">
+<html xmlns:th="http://thymeleaf.org">
+<link th:href="@{css/webpage.css}" rel="stylesheet"/>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>TfWE</title>
 </head>
 <body>
-<h1>Transport for Wiley Edge</h1>
-<a href="./loginPage">Login to your account</a><br><br>
-<a href="./registerNew">Register as a new user</a><br><br>
-<hr>
-<h2 th:text="${message}"></h2>
+	<header>
+		<img class="logo" src="images/logo.jpg" alt="logo">
+		<nav>
+			<ul class="nav_links">
+				<li><a href="./loginPage">Login to your account</a></li>
+				<li><a href="./registerNew">Register as a new user</a></li>
+			</ul>
+		</nav>
+	</header>
+	<h2 th:text="${message}"></h2>
+	<!--<a href="./loginPage">Login to your account</a><br><br>
+	<a href="./registerNew">Register as a new user</a><br><br>-->
 </body>
 </html>

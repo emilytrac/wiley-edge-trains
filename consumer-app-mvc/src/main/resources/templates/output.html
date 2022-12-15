@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="https://thymeleaf.org">
+<link th:href="@{css/output.css}" rel="stylesheet"/>
 <head>
 <meta charset="ISO-8859-1">
-<title>Transport for Wiley Edge</title>
+<title>TfWE</title>
 </head>
 <body>
-<h1>Employee Management System</h1>
-<hr>
-<h3 th:text="'Welcome '+${session.user.userName}+'!'"></h3>
-<hr>
-<h2 th:text="${message}"></h2>
-<br><br>
-<a href="./back">Go Back to Home Page</a>
+	<header>
+		<img class="logo" src="images/logo.jpg" alt="logo">
+
+		<a class="cta" href="./logout"><button>Log out</button></a>
+		
+		<a href="./back"><button>Go back to main page</button></a>
+	</header>
+	<hr>
+	<h1 th:text="'Logged in as '+${session.user.userName}+'!'"></h1>
+	<br>
+	<br>
+	<div>
+		<h2 th:text="${message}"></h2>
+	</div>
 </body>
 </html>

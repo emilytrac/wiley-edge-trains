@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="https://thymeleaf.org">
+<link th:href="@{css/webpage.css}" rel="stylesheet"/>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>TfWE</title>
 </head>
 <body>
-<h1>Transport for Wiley Edge</h1>
-<form action="./login" method="post">
-	Enter email :<input type="text" name="userEmail"><br><br>
-	Enter Password : <input type="password" name="userPassword"><br><br>
-	<input type="submit" value="Login">
+	<header>
+		<img class="logo" src="images/logo.jpg" alt="logo">
+
+		<a class="cta" href="./"><button>Return to Homepage</button></a>
+	</header>
 	
-	<h2 th:text="${message}"></h2>
-</form>
+	<section>
+		<form action="./login" method="post">
+			<label>Enter email :<input type="text" name="userEmail"><br><br></label>
+			<label>Enter Password : <input type="password" name="userPassword"><br><br></label>
+			<label><input type="submit" value="Login"><br><br></label>
+	
+			<h2 th:text="${message}"></h2>
+		</form>
+	</section>
 </body>
 </html>
