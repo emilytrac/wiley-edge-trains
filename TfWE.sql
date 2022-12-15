@@ -35,7 +35,7 @@ insert into Station(stationId, stationName)
 values(01, "St. Enum"),
 (02, "Void Park"),
 (03, "Transient Lane"),
-(04, "Super Street "),
+(04, "Super Street"),
 (05, "Final Hill");
 
 select * from Station;
