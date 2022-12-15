@@ -9,7 +9,7 @@ userId int auto_increment primary key,
 userName varchar(40) not null,
 userPassword varchar(10) not null,
 userAddress varchar(40) not null,
-userEmail varchar(40) not null,
+userEmail varchar(40) unique not null,
 userPhone char(11) not null,
 cardBalance double);
 

@@ -56,7 +56,7 @@ public class ConsumerController {
 				modelAndView.setViewName("homepage");
 			// login fails
 			} else {
-				modelAndView.addObject("message", "Invalid User Credentials, Please try again");
+				modelAndView.addObject("message", "Invalid User Credentials, Please Try Again");
 				modelAndView.setViewName("loginpage");
 			}
 			return modelAndView;
@@ -64,7 +64,7 @@ public class ConsumerController {
 		}
 	
 
-		// controllers for signing up - working
+		// controllers for signing up - is allowing less than 20 - working fully
 			
 		@RequestMapping("/registerNew")
 		public ModelAndView signUpPageController() {
@@ -78,18 +78,24 @@ public class ConsumerController {
 				
 			ModelAndView modelAndView=new ModelAndView();
 			Customer customer = consumerService.addNewCustomer(userName, userPassword, userAddress, userEmail, userPhone, cardBalance);
+			String message;
 				
 			if (customer != null) {
-				modelAndView.setViewName("registersuccess");
+				message = "Account Added, Please Login To Continue.";
+//				modelAndView.setViewName("index");
+//				modelAndView.setViewName("registersuccess");
 			} else {
-			modelAndView.addObject("message", "Something went wrong! Please try again!");
-			modelAndView.setViewName("index");
+				message = "Something Went Wrong, This Account May Already Exist Or Funds May Be Insufficient.";
+//				modelAndView.setViewName("index");
 			}
+			
+			modelAndView.addObject("message", message);
+			modelAndView.setViewName("index");
 			return modelAndView;
 				
 		}
 		
-		// controllers for topping up - api is working in postman, cannot get to work 406 error!!!
+		// controllers for topping up - balance is not updating
 			
 		@RequestMapping("/topUpPage")
 		public ModelAndView topUpAccountController() {
@@ -103,14 +109,19 @@ public class ConsumerController {
 			Customer customer = (Customer)session.getAttribute("user");
 			String message = null;
 			int userId = customer.getUserId();
-				
-			if(consumerService.updateBalance(userId, inc) != null) {
-				message = "Your balance has now been increased by " + inc;
+			
+			if (inc < 0) {
+				message = "Top-up Failed, Amount Entered Negative";
 			} else {
-				message = "top-up failed, please try again";
+				if(consumerService.updateBalance(userId, inc) != null) {
+					message = "Your Balance Has Now Been Increased By " + inc;
+					customer.setCardBalance(customer.getCardBalance() + inc);
+				} else {
+					message = "Top-up Failed, Please Try Again";
+				}
 			}
-				
-//			session.setAttribute("user", customer);
+			
+			session.setAttribute("user", customer);
 			modelAndView.addObject("message", message);
 			modelAndView.setViewName("output");
 				
@@ -144,7 +155,7 @@ public class ConsumerController {
 			String message = null;
 				
 			if (consumerService.balanceCheck(customer.getUserId()).equals("Insufficient funds")) {
-				message = "You do not have enough money. Please top up";
+				message = "You Do Not Have Enough Money. Please Top-up";
 					
 			} else {
 				String startStation = stationName;
@@ -153,7 +164,7 @@ public class ConsumerController {
 				transaction.setSwipeIn(dateTime);
 				transaction.setSwipeInStationName(stationName);
 					
-				message = "You have swiped in at " + startStation;
+				message = "You Have Swiped In At " + startStation;
 			}
 				
 			// output with message page needed
@@ -165,7 +176,7 @@ public class ConsumerController {
 				
 		}
 			
-		// controllers for swiping out - not working 406 error
+		// controllers for swiping out - fully working
 			
 		@RequestMapping("/swipeOut")
 		public ModelAndView swipeOutController() {
@@ -202,12 +213,29 @@ public class ConsumerController {
 				
 			consumerService.saveTransactionAndUpdateBalance(transaction, customer.getUserId());
 				
-			message = "You have swiped out at " + endStation + " ,your remaining balance is " + customer.getCardBalance();
+			message = "You Have Swiped Out At " + endStation + " ,Your Remaining Balance Is " + (customer.getCardBalance()-fare);
 				
 			modelAndView.addObject("message", message);
+			customer.setCardBalance(customer.getCardBalance() - fare);
 			session.setAttribute("user", customer);
 			modelAndView.setViewName("output");
 			return modelAndView;
+		}
+		
+		// controller for showing transactions by user id
+		
+		@RequestMapping("/showTransactions")
+		public ModelAndView showAllCustomerTransactions(HttpSession session) {
+			
+			ModelAndView modelAndView = new ModelAndView();
+			Customer customer = (Customer)session.getAttribute("user");
+			
+			List<Transaction> transactions = consumerService.showTransactionHistory(customer.getUserId()).getTransactions();
+			modelAndView.addObject("transactions", transactions);
+			modelAndView.setViewName("alltransactions");
+			
+			return modelAndView;
+			
 		}
 			
 		// return to home page

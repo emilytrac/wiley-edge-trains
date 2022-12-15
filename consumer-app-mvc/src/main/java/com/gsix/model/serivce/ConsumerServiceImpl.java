@@ -11,6 +11,7 @@ import com.gsix.entity.Customer;
 import com.gsix.entity.Station;
 import com.gsix.entity.StationList;
 import com.gsix.entity.Transaction;
+import com.gsix.entity.TransactionList;
 import com.gsix.model.persistence.ConsumerDao;
 
 @Service
@@ -38,7 +39,7 @@ public class ConsumerServiceImpl implements ConsumerService {
 		return customer;
 	}
 	
-	// working
+	// working - edited
 	@Override
 	public Customer addNewCustomer(String userName, String userPassword, String userAddress, String userEmail,
 			String userPhone, double cardBalance) {
@@ -55,22 +56,11 @@ public class ConsumerServiceImpl implements ConsumerService {
 		String message = restTemplate.postForObject("http://localhost:8082/customers/", customer, String.class);
 		
 		if("User added".equals(message)) {
-			return loginCheck(userName, userPassword);
+			return customer;
 		} else {
 			return null;
 		}
 	}
-
-//	public Customer createProducts(@RequestBody Customer product) {
-//	    HttpHeaders headers = new HttpHeaders();
-//	    headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-//	    HttpEntity<Customer> entity = new HttpEntity<Customer>(product,headers);
-//
-//	    ResponseEntity<Customer> response = restTemplate.exchange(
-//	            "http://localhost:8082/customers", HttpMethod.POST, entity, Customer.class);
-//
-//	    return response.getBody();
-//	}
 
 	@Override
 	public String balanceCheck(int userId) {
@@ -110,16 +100,6 @@ public class ConsumerServiceImpl implements ConsumerService {
 		return transaction;
 	}
 
-//	@Override
-//	public TransactionList showTransactionHistory(int userId) {
-//		
-//		TransactionList transactionList = new TransactionList();
-//				
-//		transactionList.setTransactions(consumerDao.searchTransactionByUserId(userId));
-//		
-//		return transactionList;
-//	}
-
 	@Override
 	public Station getStationByStationName(String stationName) {
 		
@@ -135,6 +115,15 @@ public class ConsumerServiceImpl implements ConsumerService {
 		
 		return stations;
 	}
-	
 
+	@Override
+	public TransactionList showTransactionHistory(int userId) {
+		
+		TransactionList transactionList = new TransactionList();
+		
+		transactionList.setTransactions(consumerDao.searchTransactionByUserId(userId));
+		
+		return transactionList;
+	}
+	
 }

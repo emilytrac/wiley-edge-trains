@@ -1,5 +1,7 @@
 package com.six.service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
 import com.six.entity.Customer;
 
 public interface CustomerService {
@@ -8,7 +10,7 @@ public interface CustomerService {
         
     Customer loginCheck(String userEmail, String userPassword);
         
-    Customer addCustomer(Customer customer);
+    Customer addCustomer(Customer customer) throws SQLIntegrityConstraintViolationException;
     
     boolean balanceCheck(int userId);
     

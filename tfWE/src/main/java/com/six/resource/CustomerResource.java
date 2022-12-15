@@ -2,6 +2,9 @@ package com.six.resource;
 
 import com.six.entity.Customer;
 import com.six.service.CustomerService;
+
+import java.sql.SQLIntegrityConstraintViolationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,12 +26,16 @@ public class CustomerResource {
 	}
 	
 	@PostMapping(path = "/customers",produces = MediaType.TEXT_PLAIN_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String addCustomerResource(@RequestBody Customer customer) {
-        if(customerService.addCustomer(customer) != null)
-            return "User added";
-        else
+    public String addCustomerResource(@RequestBody Customer customer) throws SQLIntegrityConstraintViolationException {
+        try {
+        	if(customerService.addCustomer(customer) != null)
+                return "User added";
+            else
 
-            return "User not added";
+                return "User not added";
+        } catch (SQLIntegrityConstraintViolationException e) {
+            return "User not added.";
+        }
     }
 	
 	@GetMapping(path = "/customers/{userId}", produces = MediaType.TEXT_PLAIN_VALUE)

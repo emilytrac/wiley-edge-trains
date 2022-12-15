@@ -2,6 +2,9 @@ package com.six.service;
 
 import com.six.entity.Customer;
 import com.six.persistence.CustomerDao;
+
+import java.sql.SQLIntegrityConstraintViolationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,11 +34,10 @@ public class CustomerServiceImpl implements CustomerService {
     
     // minor change
     @Override
-    public Customer addCustomer(Customer customer) {
+    public Customer addCustomer(Customer customer) throws SQLIntegrityConstraintViolationException {
 	     
     	if (customerDao.findByUserEmailAndUserPassword(customer.getUserEmail(), customer.getUserPassword()) == null 
     			&& customer.getCardBalance() >=100) {
-    		
     		customerDao.save(customer);
     		return customer;
     	} else {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="https://thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
@@ -8,5 +8,7 @@
 <h1>Transport for Wiley Edge</h1>
 <a href="./loginPage">Login to your account</a><br><br>
 <a href="./registerNew">Register as a new user</a><br><br>
+<hr>
+<h2 th:text="${message}"></h2>
 </body>
 </html>

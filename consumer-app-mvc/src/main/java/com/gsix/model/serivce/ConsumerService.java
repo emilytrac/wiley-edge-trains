@@ -4,12 +4,11 @@ import com.gsix.entity.Customer;
 import com.gsix.entity.Station;
 import com.gsix.entity.StationList;
 import com.gsix.entity.Transaction;
+import com.gsix.entity.TransactionList;
 
 public interface ConsumerService {
 
 	public Customer loginCheck(String userName, String userPassword);
-	
-//	public Customer getCustomerByUserEmail(String userEmail);
 	
 	public Customer addNewCustomer(String userName, String userPassword, String userAddress, String userEmail, String userPhone,
 			double cardBalance);
@@ -24,7 +23,7 @@ public interface ConsumerService {
     // save transaction
     public Transaction saveTransactionAndUpdateBalance(Transaction transaction, int userId);
     
-//  public TransactionList showTransactionHistory(int userId);
+    public TransactionList showTransactionHistory(int userId);
     
     public Station getStationByStationName(String stationName);
     
