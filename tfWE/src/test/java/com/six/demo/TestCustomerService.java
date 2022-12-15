@@ -55,7 +55,7 @@ class TestCustomerService {
     	//Customer customer = new Customer(10, "Test Person", "Password10", "Address10", "t.person@gmail.com", "07877878761", 100.0);
     	when(customerDao.findByUserEmailAndUserPassword("t.person@gmail.com", "Password10")).thenReturn(null);
     	
-    	assertNull(customerServiceImpl.loginCheck("n.test@gmail.com", "Password11"));
+    	assertNull(customerServiceImpl.loginCheck("t.person@gmail.com", "Password10"));
     			
     }
 
